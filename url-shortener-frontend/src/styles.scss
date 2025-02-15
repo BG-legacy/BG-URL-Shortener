@@ -1,0 +1,309 @@
+@use '@angular/material' as mat;
+
+@include mat.core();
+
+// Custom galaxy-themed palettes
+$galaxy-primary: mat.define-palette((
+  50: #f3e5f5,
+  100: #e1bee7,
+  200: #ce93d8,
+  300: #ba68c8,
+  400: #ab47bc,
+  500: #9c27b0,  // Primary color
+  600: #8e24aa,
+  700: #7b1fa2,
+  800: #6a1b9a,
+  900: #4a148c,
+  contrast: (
+    50: rgba(0,0,0,0.87),
+    100: rgba(0,0,0,0.87),
+    200: rgba(0,0,0,0.87),
+    300: #fff,
+    400: #fff,
+    500: #fff,
+    600: #fff,
+    700: #fff,
+    800: #fff,
+    900: #fff,
+  )
+));
+
+$galaxy-accent: mat.define-palette((
+  50: #e3f2fd,
+  100: #bbdefb,
+  200: #90caf9,
+  300: #64b5f6,
+  400: #42a5f5,
+  500: #2196f3,  // Accent color
+  600: #1e88e5,
+  700: #1976d2,
+  800: #1565c0,
+  900: #0d47a1,
+  contrast: (
+    50: rgba(0,0,0,0.87),
+    100: rgba(0,0,0,0.87),
+    200: rgba(0,0,0,0.87),
+    300: rgba(0,0,0,0.87),
+    400: rgba(0,0,0,0.87),
+    500: #fff,
+    600: #fff,
+    700: #fff,
+    800: #fff,
+    900: #fff,
+  )
+));
+
+$my-theme: mat.define-dark-theme((
+  color: (
+    primary: $galaxy-primary,
+    accent: $galaxy-accent,
+  ),
+  typography: mat.define-typography-config(),
+  density: 0,
+));
+
+@include mat.all-component-themes($my-theme);
+
+// Galaxy theme variables
+:root {
+  --galaxy-bg: #0a0a2e;
+  --galaxy-primary: #9c27b0;
+  --galaxy-accent: #2196f3;
+  --galaxy-text: #ffffff;
+  --galaxy-star: rgba(255, 255, 255, 0.8);
+  --galaxy-nebula-1: rgba(156, 39, 176, 0.2);
+  --galaxy-nebula-2: rgba(33, 150, 243, 0.2);
+}
+
+// Base styles
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  background: var(--galaxy-bg);
+  color: var(--galaxy-text);
+  overflow-x: hidden;
+}
+
+// Galaxy background
+body {
+  position: relative;
+  background: radial-gradient(circle at center, #1a1a4f 0%, #0a0a2e 100%);
+  
+  &::before {
+    content: '';
+    position: fixed;
+    width: 200vw;
+    height: 200vh;
+    top: -50vh;
+    left: -50vw;
+    background-image: 
+      radial-gradient(1px 1px at 25% 25%, var(--galaxy-star) 1px, transparent 0),
+      radial-gradient(1px 1px at 50% 50%, var(--galaxy-star) 1px, transparent 0),
+      radial-gradient(1px 1px at 75% 75%, var(--galaxy-star) 1px, transparent 0),
+      radial-gradient(2px 2px at 15% 85%, var(--galaxy-star) 1px, transparent 0),
+      radial-gradient(2px 2px at 85% 15%, var(--galaxy-star) 1px, transparent 0);
+    background-size: 
+      100px 100px,
+      120px 120px,
+      150px 150px,
+      200px 200px,
+      250px 250px;
+    animation: starRotate 100s linear infinite;
+    opacity: 0.5;
+  }
+
+  &::after {
+    content: '';
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    background: 
+      radial-gradient(circle at 20% 20%, var(--galaxy-nebula-1), transparent 50%),
+      radial-gradient(circle at 80% 80%, var(--galaxy-nebula-2), transparent 50%);
+    filter: blur(30px);
+    animation: nebulaPulse 15s ease-in-out infinite alternate;
+  }
+}
+
+// Animations
+@keyframes starRotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes nebulaPulse {
+  0% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(1.2);
+  }
+  100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+}
+
+// Material component overrides
+.mat-mdc-card {
+  background: rgba(255, 255, 255, 0.05) !important;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.mat-mdc-form-field {
+  .mdc-text-field {
+    background: rgba(255, 255, 255, 0.05) !important;
+  }
+  
+  .mdc-floating-label,
+  .mdc-text-field__input {
+    color: var(--galaxy-text) !important;
+  }
+}
+
+.mat-mdc-raised-button {
+  background: linear-gradient(45deg, var(--galaxy-primary), var(--galaxy-accent)) !important;
+  
+  &:hover {
+    background: linear-gradient(45deg, var(--galaxy-accent), var(--galaxy-primary)) !important;
+  }
+}
+
+// Container styles
+.container {
+  position: relative;
+  z-index: 1;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+// Utility classes
+.full-width {
+  width: 100%;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  background-color: #f5f5f5;
+}
+
+.container {
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+// Galaxy theme colors
+:root {
+  --galaxy-bg: #0a0b1e;
+  --galaxy-accent: #6e3b9c;
+  --galaxy-text: #ffffff;
+  --galaxy-star: rgba(255, 255, 255, 0.8);
+  --galaxy-nebula: rgba(110, 59, 156, 0.1);
+}
+
+// Global styles
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--galaxy-bg);
+  color: var(--galaxy-text);
+  position: relative;
+  overflow: hidden;
+}
+
+// Star animation
+@keyframes twinkle {
+  0%, 100% { opacity: 0.2; }
+  50% { opacity: 1; }
+}
+
+// Create stars
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    radial-gradient(var(--galaxy-star) 1px, transparent 1px),
+    radial-gradient(var(--galaxy-star) 2px, transparent 2px);
+  background-size: 50px 50px, 100px 100px;
+  background-position: 0 0, 25px 25px;
+  animation: twinkle 4s infinite;
+}
+
+// Nebula effect
+body::after {
+  content: '';
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(45deg);
+  width: 150vh;
+  height: 150vh;
+  background: radial-gradient(
+    circle at center,
+    var(--galaxy-nebula) 0%,
+    transparent 70%
+  );
+  pointer-events: none;
+}
+
+// Material theme customization
+.mat-mdc-form-field {
+  width: 100%;
+  
+  .mdc-text-field {
+    background-color: rgba(255, 255, 255, 0.05) !important;
+    border-radius: 8px;
+  }
+
+  .mdc-floating-label, 
+  .mdc-text-field__input {
+    color: var(--galaxy-text) !important;
+  }
+
+  .mdc-line-ripple::after {
+    border-color: var(--galaxy-accent) !important;
+  }
+}
+
+.mat-mdc-raised-button {
+  background-color: var(--galaxy-accent) !important;
+  color: var(--galaxy-text) !important;
+}
+
+// Container styles
+.container {
+  position: relative;
+  z-index: 1;
+  backdrop-filter: blur(4px);
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+// Card styles
+.mat-mdc-card {
+  background: rgba(255, 255, 255, 0.05) !important;
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--galaxy-text) !important;
+} 

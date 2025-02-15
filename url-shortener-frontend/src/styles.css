@@ -1,0 +1,128 @@
+/* You can add global styles to this file, and also import other style files */
+
+/* Galaxy theme variables */
+:root {
+  --galaxy-bg: #0a0a2e;
+  --galaxy-primary: #9c27b0;
+  --galaxy-accent: #2196f3;
+  --galaxy-text: #ffffff;
+  --galaxy-star: rgba(255, 255, 255, 0.8);
+  --galaxy-nebula-1: rgba(156, 39, 176, 0.2);
+  --galaxy-nebula-2: rgba(33, 150, 243, 0.2);
+}
+
+/* Base styles */
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  background: var(--galaxy-bg);
+  color: var(--galaxy-text);
+  overflow-x: hidden;
+}
+
+/* Galaxy background */
+body {
+  position: relative;
+  background: radial-gradient(circle at center, #1a1a4f 0%, #0a0a2e 100%);
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  width: 200vw;
+  height: 200vh;
+  top: -50vh;
+  left: -50vw;
+  background-image: 
+    radial-gradient(1px 1px at 25% 25%, var(--galaxy-star) 1px, transparent 0),
+    radial-gradient(1px 1px at 50% 50%, var(--galaxy-star) 1px, transparent 0),
+    radial-gradient(1px 1px at 75% 75%, var(--galaxy-star) 1px, transparent 0),
+    radial-gradient(2px 2px at 15% 85%, var(--galaxy-star) 1px, transparent 0),
+    radial-gradient(2px 2px at 85% 15%, var(--galaxy-star) 1px, transparent 0);
+  background-size: 
+    100px 100px,
+    120px 120px,
+    150px 150px,
+    200px 200px,
+    250px 250px;
+  animation: starRotate 100s linear infinite;
+  opacity: 0.5;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  background: 
+    radial-gradient(circle at 20% 20%, var(--galaxy-nebula-1), transparent 50%),
+    radial-gradient(circle at 80% 80%, var(--galaxy-nebula-2), transparent 50%);
+  filter: blur(30px);
+  animation: nebulaPulse 15s ease-in-out infinite alternate;
+}
+
+/* Animations */
+@keyframes starRotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes nebulaPulse {
+  0% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(1.2);
+  }
+  100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+}
+
+/* Material component overrides */
+.mat-mdc-card {
+  background: rgba(255, 255, 255, 0.05) !important;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.mat-mdc-form-field .mdc-text-field {
+  background: rgba(255, 255, 255, 0.05) !important;
+}
+
+.mat-mdc-form-field .mdc-floating-label,
+.mat-mdc-form-field .mdc-text-field__input {
+  color: var(--galaxy-text) !important;
+}
+
+.mat-mdc-raised-button {
+  background: linear-gradient(45deg, var(--galaxy-primary), var(--galaxy-accent)) !important;
+}
+
+.mat-mdc-raised-button:hover {
+  background: linear-gradient(45deg, var(--galaxy-accent), var(--galaxy-primary)) !important;
+}
+
+/* Container styles */
+.container {
+  position: relative;
+  z-index: 1;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* Utility classes */
+.full-width {
+  width: 100%;
+}
