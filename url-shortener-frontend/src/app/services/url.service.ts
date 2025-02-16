@@ -26,7 +26,8 @@ export interface UrlStats {
   providedIn: 'root'  // Service is available application-wide
 })
 export class UrlService {
-  private apiUrl = 'http://localhost:8080';  // Base URL for the backend API
+  // Remove trailing slash from base URL
+  private apiUrl = 'http://localhost:8081';  
 
   constructor(private http: HttpClient) { }
 
