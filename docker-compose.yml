@@ -1,23 +1,30 @@
 services:
   backend:
     build: 
-      context: ../url-shortener-backend
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: Dockerfile.backend
     ports:
       - "8081:8080"
     environment:
-      - SPRING_DATA_MONGODB_URI=mongodb://urlapp:your_password_here@mongodb:27017/urlshortener
+      - SPRING_DATA_MONGODB_URI=mongodb://urlapp:Berny1232@mongodb:27017/urlshortener?authSource=urlshortener
       - SPRING_DATA_MONGODB_DATABASE=urlshortener
       - APP_BASE_URL=http://localhost:8081/
+      - SERVER_PORT=8080
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
     depends_on:
-      - mongodb
+      mongodb:
+        condition: service_started
     networks:
       - url-shortener-network
 
   frontend:
     build: 
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.frontend
     ports:
       - "80:80"
     depends_on:
@@ -27,22 +34,23 @@ services:
 
   mongodb:
     image: mongo:latest
+    container_name: mongodb
     ports:
       - "27017:27017"
     environment:
       - MONGO_INITDB_ROOT_USERNAME=urlapp
-      - MONGO_INITDB_ROOT_PASSWORD=your_password_here
+      - MONGO_INITDB_ROOT_PASSWORD=Berny1232
       - MONGO_INITDB_DATABASE=urlshortener
-      - MONGODB_LOG_VERBOSITY=0
     volumes:
       - mongodb-data:/data/db
-      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
     networks:
       - url-shortener-network
-    command: mongod --quiet
+    command: mongod --auth
+    restart: always
 
 volumes:
   mongodb-data:
+    driver: local
 
 networks:
   url-shortener-network:

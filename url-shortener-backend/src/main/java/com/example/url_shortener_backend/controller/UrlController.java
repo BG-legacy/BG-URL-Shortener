@@ -29,7 +29,6 @@ import org.springframework.web.server.ResponseStatusException;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-@CrossOrigin(origins = "*")
 public class UrlController {
 
     private final UrlService urlService;
@@ -49,11 +48,13 @@ public class UrlController {
      * @throws ResponseStatusException with HTTP 409 if custom alias is already in use
      */
     @PostMapping("/shorten")
-    public ResponseEntity<UrlResponseDto> shortenUrl(@Valid @RequestBody UrlDto urlDto) {
-        log.info("Received request to shorten URL: {} with custom alias: {}", 
-                urlDto.getUrl(), urlDto.getCustomAlias());
-        
+    public ResponseEntity<UrlResponseDto> createShortUrl(@Valid @RequestBody UrlDto urlDto) {
+        log.info("Received URL shortening request for: {}", urlDto.getUrl());
         try {
+            if (urlDto.getUrl() == null || urlDto.getUrl().trim().isEmpty()) {
+                throw new IllegalArgumentException("URL cannot be empty");
+            }
+
             Url url = urlService.createShortUrl(urlDto.getUrl(), urlDto.getCustomAlias());
             
             UrlResponseDto response = new UrlResponseDto();
@@ -62,10 +63,11 @@ public class UrlController {
             response.setCreatedAt(url.getCreatedAt());
             response.setClickCount(url.getClickCount());
             
-            log.info("Generated short URL: {}", response.getShortUrl());
-            return new ResponseEntity<>(response, HttpStatus.CREATED);
-        } catch (IllegalArgumentException e) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
+            log.info("Created short URL: {}", response.getShortUrl());
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            log.error("Error creating short URL", e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error creating short URL: " + e.getMessage());
         }
     }
 

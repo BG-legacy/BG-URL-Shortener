@@ -36,12 +36,11 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(@NonNull CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins(
-                    "http://localhost:80",
-                    "http://localhost",
-                    "http://frontend"  // Allow from frontend container
-                )
+                .allowedOrigins("http://localhost", "http://localhost:80", "http://localhost:4200")
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                .allowedHeaders("*");
+                .allowedHeaders("Content-Type", "Authorization", "X-Requested-With", "Accept", "Origin")
+                .exposedHeaders("Access-Control-Allow-Origin")
+                .allowCredentials(true)
+                .maxAge(3600);
     }
 } 
