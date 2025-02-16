@@ -14,7 +14,7 @@ services:
 
   frontend:
     build: 
-      context: ../url-shortener-frontend  # adjust path as needed
+      context: ../url-shortener-frontend  # Make sure this path points to where your package.json is
       dockerfile: Dockerfile
     ports:
       - "80:80"
