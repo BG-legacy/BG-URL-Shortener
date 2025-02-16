@@ -1,30 +1,35 @@
-# Build Frontend
-FROM node:18 AS frontend-build
-WORKDIR /app/frontend
-COPY url-shortener-frontend/package*.json ./
+# Stage 1: Build the Angular application
+FROM node:20-alpine as build
+
+# Set working directory
+WORKDIR /app
+
+# Copy package files first to leverage Docker cache
+COPY package*.json ./
+
+# Install dependencies
 RUN npm install
-COPY url-shortener-frontend/ .
-RUN npm run build
 
-# Build Backend
-FROM maven:3.9.6-amazoncorretto-17 AS backend-build
-WORKDIR /app/backend
-COPY url-shortener-backend/pom.xml .
-COPY url-shortener-backend/src ./src
-RUN mvn clean package -DskipTests
+# Copy source code
+COPY . .
 
-# Final image
-FROM nginx:alpine
-COPY nginx.conf /etc/nginx/nginx.conf
-COPY --from=frontend-build /app/frontend/dist/url-shortener-frontend/browser /usr/share/nginx/html
-COPY --from=backend-build /app/backend/target/*.jar /app/app.jar
+# Build the application with production configuration
+RUN npm run build --configuration=production
 
-# Install OpenJDK
-RUN apk add --no-cache openjdk17-jre
+# Stage 2: Serve the application using Nginx
+FROM nginx:alpine-slim
 
-# Copy start script
-COPY start.sh /start.sh
-RUN chmod +x /start.sh
+# Remove default nginx configuration
+RUN rm /etc/nginx/conf.d/default.conf
 
+# Copy custom nginx configuration
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+# Copy built application from stage 1
+COPY --from=build /app/dist/url-shortener-frontend/browser /usr/share/nginx/html
+
+# Expose port 80
 EXPOSE 80
-CMD ["/start.sh"] 
+
+# Start Nginx
+CMD ["nginx", "-g", "daemon off;"] 
