@@ -28,7 +28,6 @@ import org.springframework.web.server.ResponseStatusException;
  */
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api")
 @Slf4j
 public class UrlController {
 
@@ -48,7 +47,7 @@ public class UrlController {
      * @return ResponseEntity containing the created URL details
      * @throws ResponseStatusException with HTTP 409 if custom alias is already in use
      */
-    @PostMapping("/shorten")
+    @PostMapping("/api/shorten")
     public ResponseEntity<UrlResponseDto> createShortUrl(@Valid @RequestBody UrlDto urlDto) {
         log.info("Received URL shortening request for: {}", urlDto.getUrl());
         try {
@@ -82,7 +81,7 @@ public class UrlController {
      * @return ResponseEntity with redirect headers to the original URL
      * @throws ResponseStatusException with HTTP 404 if the short ID is not found
      */
-    @GetMapping("/{shortId}")
+    @GetMapping("/api/{shortId}")
     public ResponseEntity<Void> redirectToOriginalUrl(@PathVariable String shortId) {
         log.info("Received redirect request for shortId: {}", shortId);
         
@@ -112,7 +111,7 @@ public class UrlController {
      * @return ResponseEntity containing the URL statistics
      * @throws ResponseStatusException with HTTP 404 if the short ID is not found
      */
-    @GetMapping("/stats/{shortId}")
+    @GetMapping("/api/stats/{shortId}")
     public ResponseEntity<UrlResponseDto> getUrlStats(@PathVariable String shortId) {
         log.info("Received request for URL stats with id: {}", shortId);
         Url url = urlService.getUrlByShortId(shortId);
