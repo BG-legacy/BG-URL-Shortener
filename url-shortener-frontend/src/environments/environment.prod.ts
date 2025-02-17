@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: process.env['API_URL'] || 'https://your-backend-domain.com'
+  apiUrl: 'https://url-shortener-backend-em78.onrender.com'
 }; 
