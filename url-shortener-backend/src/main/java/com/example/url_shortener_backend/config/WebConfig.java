@@ -37,7 +37,8 @@ public class WebConfig implements WebMvcConfigurer {
     public void addCorsMappings(@NonNull CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedOrigins(
-                    "https://stellar-url.vercel.app"
+                    "https://stellar-url.vercel.app",
+                    "http://localhost:4200"
                 )
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")

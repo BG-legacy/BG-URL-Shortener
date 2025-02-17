@@ -48,7 +48,7 @@ public class UrlController {
      * @throws ResponseStatusException with HTTP 409 if custom alias is already in use
      */
     @PostMapping("/api/shorten")
-    public ResponseEntity<UrlResponseDto> createShortUrl(@Valid @RequestBody UrlDto urlDto) {
+    public ResponseEntity<UrlResponseDto> shortenUrl(@Valid @RequestBody UrlDto urlDto) {
         log.info("Received URL shortening request for: {}", urlDto.getUrl());
         try {
             if (urlDto.getUrl() == null || urlDto.getUrl().trim().isEmpty()) {

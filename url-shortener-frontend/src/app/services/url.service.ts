@@ -27,13 +27,16 @@ export interface UrlStats {
   providedIn: 'root'  // Service is available application-wide
 })
 export class UrlService {
-  private apiUrl = environment.apiUrl;
+  private apiUrl = 'https://url-shortener-backend-em78.onrender.com/api';
 
   constructor(private http: HttpClient) { }
 
   // Creates a shortened URL from a long URL
-  shortenUrl(urlDto: UrlDto): Observable<UrlResponseDto> {
-    return this.http.post<UrlResponseDto>(`${this.apiUrl}/shorten`, urlDto);
+  shortenUrl(url: string, customAlias?: string): Observable<UrlResponseDto> {
+    return this.http.post<UrlResponseDto>(`${this.apiUrl}/shorten`, {
+      url: url,
+      customAlias: customAlias
+    });
   }
 
   // Retrieves statistics for a specific shortened URL
