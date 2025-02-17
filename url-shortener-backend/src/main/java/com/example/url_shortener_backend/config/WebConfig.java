@@ -43,7 +43,7 @@ public class WebConfig implements WebMvcConfigurer {
                     "https://stellarurl.onrender.com"
                 )
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                .allowedHeaders("Content-Type", "Authorization", "X-Requested-With", "Accept", "Origin")
+                .allowedHeaders("*")
                 .exposedHeaders("Access-Control-Allow-Origin")
                 .allowCredentials(true)
                 .maxAge(3600);

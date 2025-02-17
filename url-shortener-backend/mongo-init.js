@@ -1,6 +1,6 @@
 db.createUser({
     user: "urlapp",
-    pwd: "your_password_here",
+    pwd: "Berny1232",
     roles: [
         {
             role: "readWrite",
