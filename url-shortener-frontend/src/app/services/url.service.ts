@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 
@@ -28,6 +28,10 @@ export interface UrlStats {
 })
 export class UrlService {
   private apiUrl = 'https://url-shortener-backend-em78.onrender.com/api';
+  private headers = new HttpHeaders({
+    'Content-Type': 'application/json',
+    'Accept': 'application/json'
+  });
 
   constructor(private http: HttpClient) { }
 
@@ -35,18 +39,22 @@ export class UrlService {
     return this.http.post<UrlResponseDto>(`${this.apiUrl}/shorten`, {
       url: url,
       customAlias: customAlias
-    });
+    }, { headers: this.headers });
   }
 
   getUrlStats(shortId: string): Observable<UrlResponseDto> {
     // Remove any curly braces or slashes from the shortId
     const cleanShortId = shortId.replace(/[{}\/]/g, '');
-    return this.http.get<UrlResponseDto>(`${this.apiUrl}/stats/${cleanShortId}`);
+    return this.http.get<UrlResponseDto>(`${this.apiUrl}/stats/${cleanShortId}`, 
+      { headers: this.headers }
+    );
   }
 
   // Checks if a custom alias is available for use
   checkAliasAvailability(alias: string): Observable<boolean> {
-    return this.http.get<boolean>(`${this.apiUrl}/alias-available/${alias}`);
+    return this.http.get<boolean>(`${this.apiUrl}/alias-available/${alias}`, 
+      { headers: this.headers }
+    );
   }
 
   // Creates a shortened URL with a specific custom alias
@@ -55,11 +63,22 @@ export class UrlService {
       url: originalUrl,
       customAlias: customAlias
     };
-    return this.http.post<UrlResponseDto>(`${this.apiUrl}/shorten/custom`, urlDto);
+    return this.http.post<UrlResponseDto>(`${this.apiUrl}/shorten/custom`, urlDto, 
+      { headers: this.headers }
+    );
   }
 
   // Validates a custom alias against backend rules
   validateCustomAlias(alias: string): Observable<{valid: boolean, message?: string}> {
-    return this.http.post<{valid: boolean, message?: string}>(`${this.apiUrl}/validate-alias`, { alias });
+    return this.http.post<{valid: boolean, message?: string}>(
+      `${this.apiUrl}/validate-alias`, 
+      { alias }, 
+      { headers: this.headers }
+    );
+  }
+
+  // Add a method to handle direct redirects
+  redirectToUrl(shortUrl: string): void {
+    window.open(shortUrl, '_blank');
   }
 }
