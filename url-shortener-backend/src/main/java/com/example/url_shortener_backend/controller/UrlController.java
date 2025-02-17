@@ -28,6 +28,7 @@ import org.springframework.web.server.ResponseStatusException;
  */
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api")
 @Slf4j
 public class UrlController {
 
