@@ -31,15 +31,14 @@ export class UrlService {
 
   constructor(private http: HttpClient) { }
 
-  // Update the parameter type to accept either string or UrlDto
-  shortenUrl(urlData: string | UrlDto): Observable<UrlResponseDto> {
-    const payload = typeof urlData === 'string' ? { url: urlData } : urlData;
-    return this.http.post<UrlResponseDto>(`${this.apiUrl}/shorten`, payload);
+  shortenUrl(url: string): Observable<UrlResponseDto> {
+    return this.http.post<UrlResponseDto>(`${this.apiUrl}/shorten`, { url });
   }
 
-  // Retrieves statistics for a specific shortened URL
   getUrlStats(shortId: string): Observable<UrlResponseDto> {
-    return this.http.get<UrlResponseDto>(`${this.apiUrl}/stats/${shortId}`);
+    // Remove any curly braces or slashes from the shortId
+    const cleanShortId = shortId.replace(/[{}\/]/g, '');
+    return this.http.get<UrlResponseDto>(`${this.apiUrl}/stats/${cleanShortId}`);
   }
 
   // Checks if a custom alias is available for use

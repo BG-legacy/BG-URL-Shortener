@@ -29,10 +29,11 @@ import { MatIconModule } from '@angular/material/icon';
           <mat-form-field class="full-width">
             <mat-label>Enter your URL</mat-label>
             <input matInput [(ngModel)]="url" placeholder="https://example.com">
+            <mat-error *ngIf="error">{{error}}</mat-error>
           </mat-form-field>
 
           <div class="button-container">
-            <button mat-raised-button (click)="onSubmit()" [disabled]="!url">
+            <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="!url">
               Shorten URL
             </button>
           </div>
@@ -41,7 +42,7 @@ import { MatIconModule } from '@angular/material/icon';
             <mat-form-field class="full-width">
               <mat-label>Shortened URL</mat-label>
               <input matInput [value]="shortUrl" readonly>
-              <button mat-icon-button matSuffix (click)="copyToClipboard()">
+              <button mat-icon-button matSuffix (click)="copyToClipboard()" [matTooltip]="'Copy to clipboard'">
                 <mat-icon>content_copy</mat-icon>
               </button>
             </mat-form-field>
@@ -49,10 +50,6 @@ import { MatIconModule } from '@angular/material/icon';
             <div class="click-count" *ngIf="clickCount !== null">
               Clicks: {{clickCount}}
             </div>
-          </div>
-
-          <div *ngIf="error" class="error-message">
-            {{error}}
           </div>
         </mat-card-content>
       </mat-card>
@@ -126,6 +123,11 @@ export class AppComponent {
   onSubmit() {
     if (!this.url) return;
     
+    if (!this.isValidUrl(this.url)) {
+      this.error = 'Please enter a valid URL';
+      return;
+    }
+
     this.urlService.shortenUrl(this.url).subscribe({
       next: (response: UrlResponseDto) => {
         this.shortUrl = response.shortUrl;
@@ -158,6 +160,15 @@ export class AppComponent {
           }
         });
       }
+    }
+  }
+
+  private isValidUrl(url: string): boolean {
+    try {
+      new URL(url);
+      return true;
+    } catch {
+      return false;
     }
   }
 }
