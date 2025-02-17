@@ -31,12 +31,10 @@ export class UrlService {
 
   constructor(private http: HttpClient) { }
 
-  // Creates a shortened URL from a long URL
-  shortenUrl(url: string, customAlias?: string): Observable<UrlResponseDto> {
-    return this.http.post<UrlResponseDto>(`${this.apiUrl}/shorten`, {
-      url: url,
-      customAlias: customAlias
-    });
+  // Update the parameter type to accept either string or UrlDto
+  shortenUrl(urlData: string | UrlDto): Observable<UrlResponseDto> {
+    const payload = typeof urlData === 'string' ? { url: urlData } : urlData;
+    return this.http.post<UrlResponseDto>(`${this.apiUrl}/shorten`, payload);
   }
 
   // Retrieves statistics for a specific shortened URL

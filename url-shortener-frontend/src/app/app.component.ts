@@ -126,7 +126,7 @@ export class AppComponent {
   onSubmit() {
     if (!this.url) return;
     
-    this.urlService.shortenUrl({ url: this.url }).subscribe({
+    this.urlService.shortenUrl(this.url).subscribe({
       next: (response: UrlResponseDto) => {
         this.shortUrl = response.shortUrl;
         this.error = '';
