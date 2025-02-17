@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Value;
 import java.net.URI;
 import org.springframework.web.server.ResponseStatusException;
-import com.example.url_shortener_backend.exception.UrlNotFoundException;
 
 /**
  * REST Controller for handling URL shortening operations.
@@ -51,24 +50,25 @@ public class UrlController {
     @PostMapping("/api/shorten")
     public ResponseEntity<UrlResponseDto> shortenUrl(@Valid @RequestBody UrlDto urlDto) {
         log.info("Received URL shortening request for: {}", urlDto.getUrl());
-        try {
-            if (urlDto.getUrl() == null || urlDto.getUrl().trim().isEmpty()) {
-                throw new IllegalArgumentException("URL cannot be empty");
-            }
+        
+        if (urlDto.getUrl() == null || urlDto.getUrl().trim().isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "URL cannot be empty");
+        }
 
+        try {
             Url url = urlService.createShortUrl(urlDto.getUrl(), urlDto.getCustomAlias());
             
             UrlResponseDto response = new UrlResponseDto();
             response.setOriginalUrl(url.getOriginalUrl());
-            response.setShortUrl(baseUrl + url.getShortId());
+            String cleanBaseUrl = baseUrl.endsWith("/") ? baseUrl.substring(0, baseUrl.length() - 1) : baseUrl;
+            response.setShortUrl(cleanBaseUrl + "/" + url.getShortId());
             response.setCreatedAt(url.getCreatedAt());
             response.setClickCount(url.getClickCount());
             
-            log.info("Created short URL: {}", response.getShortUrl());
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             log.error("Error creating short URL", e);
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error creating short URL: " + e.getMessage());
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error creating short URL");
         }
     }
 
@@ -82,21 +82,18 @@ public class UrlController {
      * @return ResponseEntity with redirect headers to the original URL
      * @throws ResponseStatusException with HTTP 404 if the short ID is not found
      */
-    @GetMapping("/api/{shortId}")
+    @GetMapping("/{shortId}")
     public ResponseEntity<Void> redirectToOriginalUrl(@PathVariable String shortId) {
         log.info("Received redirect request for shortId: {}", shortId);
-        try {
-            Url url = urlService.incrementClickCount(shortId);
-            log.info("Redirecting to: {} with click count: {}", url.getOriginalUrl(), url.getClickCount());
-            
-            HttpHeaders headers = new HttpHeaders();
-            headers.setLocation(URI.create(url.getOriginalUrl()));
-            
-            return new ResponseEntity<>(headers, HttpStatus.FOUND);
-        } catch (UrlNotFoundException e) {
-            log.error("URL not found with shortId: {}", shortId);
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "URL not found for id: " + shortId);
-        }
+        
+        // Get and update URL
+        Url url = urlService.incrementClickCount(shortId);
+        log.info("Redirecting to: {} with click count: {}", url.getOriginalUrl(), url.getClickCount());
+        
+        HttpHeaders headers = new HttpHeaders();
+        headers.setLocation(URI.create(url.getOriginalUrl()));
+        
+        return new ResponseEntity<>(headers, HttpStatus.FOUND);
     }
 
     /**
@@ -118,19 +115,15 @@ public class UrlController {
     @GetMapping("/api/stats/{shortId}")
     public ResponseEntity<UrlResponseDto> getUrlStats(@PathVariable String shortId) {
         log.info("Received request for URL stats with id: {}", shortId);
-        try {
-            Url url = urlService.getUrlByShortId(shortId);
-            
-            UrlResponseDto response = new UrlResponseDto();
-            response.setOriginalUrl(url.getOriginalUrl());
-            response.setShortUrl(baseUrl + "api/" + url.getShortId());
-            response.setCreatedAt(url.getCreatedAt());
-            response.setClickCount(url.getClickCount());
-            
-            return ResponseEntity.ok(response);
-        } catch (UrlNotFoundException e) {
-            log.error("URL not found with shortId: {}", shortId);
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "URL not found for id: " + shortId);
-        }
+        Url url = urlService.getUrlByShortId(shortId);
+        
+        UrlResponseDto response = new UrlResponseDto();
+        response.setOriginalUrl(url.getOriginalUrl());
+        String cleanBaseUrl = baseUrl.endsWith("/") ? baseUrl.substring(0, baseUrl.length() - 1) : baseUrl;
+        response.setShortUrl(cleanBaseUrl + "/" + url.getShortId());
+        response.setCreatedAt(url.getCreatedAt());
+        response.setClickCount(url.getClickCount());
+        
+        return ResponseEntity.ok(response);
     }
 } 

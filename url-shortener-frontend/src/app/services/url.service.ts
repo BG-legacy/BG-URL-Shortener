@@ -31,8 +31,11 @@ export class UrlService {
 
   constructor(private http: HttpClient) { }
 
-  shortenUrl(url: string): Observable<UrlResponseDto> {
-    return this.http.post<UrlResponseDto>(`${this.apiUrl}/shorten`, { url });
+  shortenUrl(url: string, customAlias?: string): Observable<UrlResponseDto> {
+    return this.http.post<UrlResponseDto>(`${this.apiUrl}/shorten`, {
+      url: url,
+      customAlias: customAlias
+    });
   }
 
   getUrlStats(shortId: string): Observable<UrlResponseDto> {
