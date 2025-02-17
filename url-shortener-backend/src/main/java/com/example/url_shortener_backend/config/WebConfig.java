@@ -36,7 +36,12 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(@NonNull CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("http://localhost", "http://localhost:80", "http://localhost:4200")
+                .allowedOrigins(
+                    "http://localhost",
+                    "http://localhost:80", 
+                    "http://localhost:4200",
+                    "https://stellarurl.onrender.com"
+                )
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("Content-Type", "Authorization", "X-Requested-With", "Accept", "Origin")
                 .exposedHeaders("Access-Control-Allow-Origin")

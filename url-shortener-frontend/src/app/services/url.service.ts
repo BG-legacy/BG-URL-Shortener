@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 // Data transfer object for URL shortening requests
 export interface UrlDto {
@@ -26,8 +27,7 @@ export interface UrlStats {
   providedIn: 'root'  // Service is available application-wide
 })
 export class UrlService {
-  // Remove trailing slash from base URL
-  private apiUrl = 'http://localhost:8081';  
+  private apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) { }
 
