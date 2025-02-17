@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://stellarurl.onrender.com/api'
+  apiUrl: process.env['API_URL'] || 'https://your-backend-domain.com'
 }; 
