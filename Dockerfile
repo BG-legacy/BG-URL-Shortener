@@ -4,6 +4,8 @@ WORKDIR /app/frontend
 COPY url-shortener-frontend/package*.json ./
 RUN npm install
 COPY url-shortener-frontend/ .
+# Set production API URL during build
+RUN sed -i "s|http://localhost:8081|https://stellarurl.onrender.com|g" src/environments/environment.prod.ts
 RUN npm run build --configuration=production
 
 # Stage 2: Build the backend
