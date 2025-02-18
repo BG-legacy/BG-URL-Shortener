@@ -21,35 +21,36 @@ html, body {
   overflow-x: hidden;
 }
 
-/* Galaxy background */
+/* Galaxy background - optimized for mobile */
 body {
   position: relative;
   background: radial-gradient(circle at center, #1a1a4f 0%, #0a0a2e 100%);
 }
 
+/* Mobile-optimized stars */
 body::before {
   content: '';
   position: fixed;
-  width: 200vw;
-  height: 200vh;
-  top: -50vh;
-  left: -50vw;
+  width: 150vw;  /* Reduced from 200vw */
+  height: 150vh; /* Reduced from 200vh */
+  top: -25vh;    /* Adjusted positioning */
+  left: -25vw;
+  z-index: 0;
   background-image: 
     radial-gradient(1px 1px at 25% 25%, var(--galaxy-star) 1px, transparent 0),
     radial-gradient(1px 1px at 50% 50%, var(--galaxy-star) 1px, transparent 0),
-    radial-gradient(1px 1px at 75% 75%, var(--galaxy-star) 1px, transparent 0),
-    radial-gradient(2px 2px at 15% 85%, var(--galaxy-star) 1px, transparent 0),
-    radial-gradient(2px 2px at 85% 15%, var(--galaxy-star) 1px, transparent 0);
+    radial-gradient(1px 1px at 75% 75%, var(--galaxy-star) 1px, transparent 0);
   background-size: 
-    100px 100px,
-    120px 120px,
-    150px 150px,
-    200px 200px,
-    250px 250px;
-  animation: starRotate 100s linear infinite;
-  opacity: 0.5;
+    50px 50px,    /* Smaller star patterns for mobile */
+    60px 60px,
+    75px 75px;
+  animation: starRotate 180s linear infinite;
+  opacity: 0.7;
+  will-change: transform;  /* Optimize animation performance */
+  transform: translateZ(0);  /* Force GPU acceleration */
 }
 
+/* Mobile-optimized nebula */
 body::after {
   content: '';
   position: fixed;
@@ -57,35 +58,59 @@ body::after {
   height: 100vh;
   top: 0;
   left: 0;
+  z-index: 0;
   background: 
-    radial-gradient(circle at 20% 20%, var(--galaxy-nebula-1), transparent 50%),
-    radial-gradient(circle at 80% 80%, var(--galaxy-nebula-2), transparent 50%);
-  filter: blur(30px);
-  animation: nebulaPulse 15s ease-in-out infinite alternate;
+    radial-gradient(circle at 20% 20%, var(--galaxy-nebula-1), transparent 40%),
+    radial-gradient(circle at 80% 80%, var(--galaxy-nebula-2), transparent 40%);
+  filter: blur(20px);  /* Reduced blur for better performance */
+  animation: nebulaPulse 20s ease-in-out infinite alternate;
+  will-change: transform, opacity;
+  transform: translateZ(0);
 }
 
-/* Animations */
+/* Optimized animations */
 @keyframes starRotate {
   from {
-    transform: rotate(0deg);
+    transform: rotate(0deg) translateZ(0);
   }
   to {
-    transform: rotate(360deg);
+    transform: rotate(360deg) translateZ(0);
   }
 }
 
 @keyframes nebulaPulse {
   0% {
     opacity: 0.3;
-    transform: scale(1);
+    transform: scale(1) translateZ(0);
   }
   50% {
-    opacity: 0.5;
-    transform: scale(1.2);
+    opacity: 0.4;
+    transform: scale(1.1) translateZ(0);
   }
   100% {
     opacity: 0.3;
-    transform: scale(1);
+    transform: scale(1) translateZ(0);
+  }
+}
+
+/* Mobile-specific optimizations */
+@media screen and (max-width: 600px) {
+  body::before {
+    animation: starRotate 240s linear infinite;  /* Slower animation for mobile */
+    opacity: 0.5;
+  }
+
+  body::after {
+    filter: blur(15px);  /* Less blur for better performance */
+    animation: nebulaPulse 25s ease-in-out infinite alternate;
+  }
+
+  /* Reduce animation complexity on low-power devices */
+  @media (prefers-reduced-motion: reduce) {
+    body::before,
+    body::after {
+      animation: none;
+    }
   }
 }
 
