@@ -177,13 +177,19 @@ import { MatTooltipModule } from '@angular/material/tooltip';
   `]
 })
 export class AppComponent {
-  url: string = '';
-  shortUrl: string = '';
-  error: string = '';
-  clickCount: number | null = null;
+  // Main component properties
+  title = 'url-shortener-frontend';
+  url: string = '';              // Stores the input URL
+  shortUrl: string = '';         // Stores the shortened URL
+  error: string = '';           // Stores error messages
+  clickCount: number | null = null;  // Tracks number of clicks on shortened URL
 
   constructor(private urlService: UrlService) {}
 
+  /**
+   * Handles the URL shortening submission
+   * Validates the URL and calls the URL shortening service
+   */
   onSubmit() {
     if (!this.url) return;
     
@@ -205,17 +211,27 @@ export class AppComponent {
     });
   }
 
+  /**
+   * Formats the shortened URL for display
+   * Extracts the short ID and prepends the domain
+   */
   getDisplayUrl(url: string): string {
     const shortId = url.split('/').pop();
     return `stellar.url/${shortId}`;
   }
 
+  /**
+   * Copies the shortened URL to clipboard
+   */
   copyToClipboard() {
     navigator.clipboard.writeText(this.shortUrl).then(() => {
       console.log('URL copied to clipboard');
     });
   }
 
+  /**
+   * Fetches and updates the click statistics for the shortened URL
+   */
   trackClick() {
     if (this.shortUrl) {
       const shortId = this.shortUrl.split('/').pop();
@@ -232,11 +248,20 @@ export class AppComponent {
     }
   }
 
+  /**
+   * Handles clicks on the shortened URL
+   * Updates click tracking while allowing default link behavior
+   */
   handleUrlClick(event: MouseEvent) {
     // Don't prevent default - let the link open in new tab
     this.trackClick();
   }
 
+  /**
+   * Validates if a string is a proper URL
+   * @param url - The URL string to validate
+   * @returns boolean indicating if the URL is valid
+   */
   private isValidUrl(url: string): boolean {
     try {
       new URL(url);
