@@ -45,12 +45,12 @@ import { MatTooltipModule } from '@angular/material/tooltip';
               <mat-label>Shortened URL</mat-label>
               <input matInput [value]="shortUrl" readonly>
               <div class="url-actions">
-                <a [href]="shortUrl" target="_blank" class="short-url-link" (click)="handleUrlClick($event)">
-                  <mat-icon>open_in_new</mat-icon>
-                </a>
                 <button mat-icon-button (click)="copyToClipboard()" [matTooltip]="'Copy to clipboard'">
                   <mat-icon>content_copy</mat-icon>
                 </button>
+                <a [href]="shortUrl" target="_blank" class="short-url-link" (click)="handleUrlClick($event)">
+                  <mat-icon>open_in_new</mat-icon>
+                </a>
               </div>
             </mat-form-field>
 
