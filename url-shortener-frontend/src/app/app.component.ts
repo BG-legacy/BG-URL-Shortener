@@ -183,6 +183,7 @@ export class AppComponent {
   shortUrl: string = '';         // Stores the shortened URL
   error: string = '';           // Stores error messages
   clickCount: number | null = null;  // Tracks number of clicks on shortened URL
+  loading = false;
 
   constructor(private urlService: UrlService) {}
 
@@ -190,7 +191,7 @@ export class AppComponent {
    * Handles the URL shortening submission
    * Validates the URL and calls the URL shortening service
    */
-  onSubmit() {
+  async onSubmit() {
     if (!this.url) return;
     
     if (!this.isValidUrl(this.url)) {
@@ -198,17 +199,25 @@ export class AppComponent {
       return;
     }
 
-    this.urlService.shortenUrl(this.url).subscribe({
-      next: (response: UrlResponseDto) => {
-        this.shortUrl = response.shortUrl;
-        this.error = '';
-        this.trackClick();
-      },
-      error: (error) => {
-        console.error('Error shortening URL:', error);
-        this.error = 'Error shortening URL. Please try again.';
-      }
-    });
+    this.loading = true;
+    try {
+      this.urlService.shortenUrl(this.url).subscribe({
+        next: (response: UrlResponseDto) => {
+          this.shortUrl = response.shortUrl;
+          this.error = '';
+          this.trackClick();
+        },
+        error: (error) => {
+          console.error('Error shortening URL:', error);
+          this.error = 'Error shortening URL. Please try again.';
+        }
+      });
+    } catch (error) {
+      console.error('Error:', error);
+      this.error = 'Error shortening URL. Please try again.';
+    } finally {
+      this.loading = false;
+    }
   }
 
   /**

@@ -1,2 +1,10 @@
 <router-outlet></router-outlet>
 <app-url-shortener></app-url-shortener>
+
+<button (click)="shortenUrl()" [disabled]="loading">
+  {{ loading ? 'Shortening...' : 'Shorten' }}
+</button>
+
+<div *ngIf="loading" class="loading-spinner">
+  Please wait, connecting to server...
+</div>
