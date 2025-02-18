@@ -27,7 +27,7 @@ body {
   background: radial-gradient(circle at center, #1a1a4f 0%, #0a0a2e 70%, #050514 100%);
 }
 
-/* Stars for desktop only */
+/* Rotating stars for desktop only */
 @media screen and (min-width: 601px) {
   body::before {
     content: '';
@@ -38,20 +38,27 @@ body {
     left: -50vw;
     z-index: 0;
     background-image: 
-      radial-gradient(1px 1px at 15% 15%, var(--galaxy-star) 1px, transparent 0),
-      radial-gradient(1px 1px at 35% 35%, var(--galaxy-star) 1px, transparent 0),
-      radial-gradient(1px 1px at 55% 55%, var(--galaxy-star) 1px, transparent 0),
-      radial-gradient(1px 1px at 75% 75%, var(--galaxy-star) 1px, transparent 0),
-      radial-gradient(1px 1px at 95% 95%, var(--galaxy-star) 1px, transparent 0);
+      radial-gradient(1px 1px at 20% 20%, var(--galaxy-star) 1px, transparent 0),
+      radial-gradient(1px 1px at 50% 50%, var(--galaxy-star) 1px, transparent 0),
+      radial-gradient(1px 1px at 80% 80%, var(--galaxy-star) 1px, transparent 0);
     background-size: 
-      25px 25px,
-      35px 35px,
-      45px 45px,
-      55px 55px,
-      65px 65px;
-    opacity: 0.8;
+      100px 100px,
+      120px 120px,
+      140px 140px;
+    opacity: 0.5;
     will-change: transform;
     transform: translateZ(0);
+    animation: starRotate 240s linear infinite;  /* Slow rotation */
+  }
+}
+
+/* Rotation animation for stars */
+@keyframes starRotate {
+  from {
+    transform: rotate(0deg) translateZ(0);
+  }
+  to {
+    transform: rotate(360deg) translateZ(0);
   }
 }
 
