@@ -40,10 +40,10 @@ public class WebConfig implements WebMvcConfigurer {
                     "https://stellar-url.vercel.app",
                     "http://localhost:4200"
                 )
-                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD")
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
-                .exposedHeaders("Access-Control-Allow-Origin", "Access-Control-Allow-Credentials")
-                .allowCredentials(true)
+                .exposedHeaders("Access-Control-Allow-Origin")
+                .allowCredentials(false)
                 .maxAge(3600);
     }
 } 
