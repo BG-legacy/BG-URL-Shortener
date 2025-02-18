@@ -7,8 +7,8 @@
   --galaxy-accent: #2196f3;
   --galaxy-text: #ffffff;
   --galaxy-star: rgba(255, 255, 255, 0.8);
-  --galaxy-nebula-1: rgba(156, 39, 176, 0.2);
-  --galaxy-nebula-2: rgba(33, 150, 243, 0.2);
+  --galaxy-nebula-1: rgba(156, 39, 176, 0.3);
+  --galaxy-nebula-2: rgba(33, 150, 243, 0.3);
 }
 
 /* Base styles */
@@ -21,19 +21,19 @@ html, body {
   overflow-x: hidden;
 }
 
-/* Galaxy background - optimized for mobile */
+/* Galaxy background - darker for mobile */
 body {
   position: relative;
-  background: radial-gradient(circle at center, #1a1a4f 0%, #0a0a2e 100%);
+  background: radial-gradient(circle at center, #1a1a4f 0%, #0a0a2e 70%, #050514 100%);
 }
 
 /* Mobile-optimized stars */
 body::before {
   content: '';
   position: fixed;
-  width: 150vw;  /* Reduced from 200vw */
-  height: 150vh; /* Reduced from 200vh */
-  top: -25vh;    /* Adjusted positioning */
+  width: 150vw;
+  height: 150vh;
+  top: -25vh;
   left: -25vw;
   z-index: 0;
   background-image: 
@@ -41,13 +41,13 @@ body::before {
     radial-gradient(1px 1px at 50% 50%, var(--galaxy-star) 1px, transparent 0),
     radial-gradient(1px 1px at 75% 75%, var(--galaxy-star) 1px, transparent 0);
   background-size: 
-    50px 50px,    /* Smaller star patterns for mobile */
+    50px 50px,
     60px 60px,
     75px 75px;
   animation: starRotate 180s linear infinite;
-  opacity: 0.7;
-  will-change: transform;  /* Optimize animation performance */
-  transform: translateZ(0);  /* Force GPU acceleration */
+  opacity: 0.8;
+  will-change: transform;
+  transform: translateZ(0);
 }
 
 /* Mobile-optimized nebula */
@@ -60,12 +60,13 @@ body::after {
   left: 0;
   z-index: 0;
   background: 
-    radial-gradient(circle at 20% 20%, var(--galaxy-nebula-1), transparent 40%),
-    radial-gradient(circle at 80% 80%, var(--galaxy-nebula-2), transparent 40%);
-  filter: blur(20px);  /* Reduced blur for better performance */
+    radial-gradient(circle at 20% 20%, var(--galaxy-nebula-1), transparent 50%),
+    radial-gradient(circle at 80% 80%, var(--galaxy-nebula-2), transparent 50%);
+  filter: blur(15px);
   animation: nebulaPulse 20s ease-in-out infinite alternate;
   will-change: transform, opacity;
   transform: translateZ(0);
+  opacity: 0.8;
 }
 
 /* Optimized animations */
@@ -95,14 +96,25 @@ body::after {
 
 /* Mobile-specific optimizations */
 @media screen and (max-width: 600px) {
+  body {
+    background: radial-gradient(circle at center, #1a1a4f 0%, #0a0a2e 60%, #050514 100%);
+  }
+
   body::before {
-    animation: starRotate 240s linear infinite;  /* Slower animation for mobile */
-    opacity: 0.5;
+    opacity: 0.6;
+    animation: starRotate 240s linear infinite;
   }
 
   body::after {
-    filter: blur(15px);  /* Less blur for better performance */
-    animation: nebulaPulse 25s ease-in-out infinite alternate;
+    opacity: 0.7;
+    filter: blur(15px);
+    background: 
+      radial-gradient(circle at 20% 20%, var(--galaxy-nebula-1), transparent 40%),
+      radial-gradient(circle at 80% 80%, var(--galaxy-nebula-2), transparent 40%);
+  }
+
+  .url-card {
+    background: rgba(10, 10, 46, 0.8) !important;
   }
 
   /* Reduce animation complexity on low-power devices */
@@ -239,4 +251,11 @@ body::after {
 @viewport {
   width: device-width;
   initial-scale: 1;
+}
+
+/* Card styles - darker and more transparent */
+.url-card {
+  background: rgba(10, 10, 46, 0.7) !important;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
