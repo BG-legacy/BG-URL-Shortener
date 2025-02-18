@@ -171,3 +171,47 @@ body::after {
 .mat-mdc-button-base {
   margin: 8px !important;
 }
+
+/* Mobile responsiveness */
+@media screen and (max-width: 600px) {
+  .container {
+    padding: 1rem;
+    margin: 1rem;
+  }
+
+  h1 {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .mat-mdc-card {
+    padding: 1rem;
+  }
+
+  .mat-mdc-form-field {
+    width: 100%;
+  }
+
+  .button-container {
+    display: flex;
+    justify-content: center;
+    margin: 1rem 0;
+  }
+
+  .url-actions {
+    gap: 4px;
+  }
+
+  /* Adjust icon sizes for mobile */
+  .mat-icon {
+    font-size: 18px !important;
+    width: 18px !important;
+    height: 18px !important;
+  }
+}
+
+/* Add viewport meta tag for proper mobile scaling */
+@viewport {
+  width: device-width;
+  initial-scale: 1;
+}

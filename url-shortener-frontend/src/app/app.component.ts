@@ -79,12 +79,13 @@ import { MatTooltipModule } from '@angular/material/tooltip';
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
+      word-wrap: break-word;
     }
 
     .url-card {
       backdrop-filter: blur(10px);
-      background: rgba(255, 255, 255, 0.05) !important;
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
       padding: 1.5rem;
     }
 
@@ -99,6 +100,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     }
 
     .result-container {
+      margin-top: 1rem;
       position: relative;
     }
 
@@ -110,8 +112,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 
     .click-count {
       text-align: center;
-      margin-top: 1rem;
-      color: var(--galaxy-text);
+      margin-top: 0.5rem;
+      color: rgba(255, 255, 255, 0.7);
     }
 
     .url-actions {
@@ -146,6 +148,31 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 
     mat-form-field {
       margin-bottom: 0.5rem;
+    }
+
+    /* Mobile-specific styles */
+    @media screen and (max-width: 600px) {
+      .container {
+        margin: 1rem;
+      }
+
+      h1 {
+        font-size: 2rem;
+      }
+
+      .url-card {
+        padding: 1rem;
+      }
+
+      .url-actions {
+        gap: 4px;
+      }
+
+      .mat-icon {
+        font-size: 18px;
+        width: 18px;
+        height: 18px;
+      }
     }
   `]
 })
