@@ -43,7 +43,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
           <div *ngIf="shortUrl" class="result-container">
             <mat-form-field class="full-width">
               <mat-label>Shortened URL</mat-label>
-              <input matInput [value]="shortUrl" readonly>
+              <input matInput [value]="getDisplayUrl(shortUrl)" readonly>
               <div class="url-actions">
                 <button mat-icon-button (click)="copyToClipboard()" [matTooltip]="'Copy to clipboard'">
                   <mat-icon>content_copy</mat-icon>
@@ -176,6 +176,11 @@ export class AppComponent {
         this.error = 'Error shortening URL. Please try again.';
       }
     });
+  }
+
+  getDisplayUrl(url: string): string {
+    const shortId = url.split('/').pop();
+    return `stellar.url/${shortId}`;
   }
 
   copyToClipboard() {
