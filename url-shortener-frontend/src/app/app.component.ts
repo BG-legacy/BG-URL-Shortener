@@ -44,9 +44,14 @@ import { MatTooltipModule } from '@angular/material/tooltip';
             <mat-form-field class="full-width">
               <mat-label>Shortened URL</mat-label>
               <input matInput [value]="shortUrl" readonly>
-              <button mat-icon-button matSuffix (click)="copyToClipboard()" [matTooltip]="'Copy to clipboard'">
-                <mat-icon>content_copy</mat-icon>
-              </button>
+              <div class="url-actions">
+                <a [href]="shortUrl" target="_blank" class="short-url-link" (click)="handleUrlClick($event)">
+                  <mat-icon>open_in_new</mat-icon>
+                </a>
+                <button mat-icon-button (click)="copyToClipboard()" [matTooltip]="'Copy to clipboard'">
+                  <mat-icon>content_copy</mat-icon>
+                </button>
+              </div>
             </mat-form-field>
 
             <div class="click-count" *ngIf="clickCount !== null">
@@ -94,7 +99,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     }
 
     .result-container {
-      margin-top: 1.5rem;
+      position: relative;
     }
 
     .error-message {
@@ -107,6 +112,36 @@ import { MatTooltipModule } from '@angular/material/tooltip';
       text-align: center;
       margin-top: 1rem;
       color: var(--galaxy-text);
+    }
+
+    .url-actions {
+      display: flex;
+      gap: 8px;
+      position: absolute;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      padding-right: 8px;
+    }
+
+    .short-url-link {
+      color: var(--galaxy-accent);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      padding: 4px;
+      border-radius: 4px;
+      transition: background-color 0.2s;
+
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+      }
+
+      mat-icon {
+        font-size: 20px;
+        width: 20px;
+        height: 20px;
+      }
     }
 
     mat-form-field {
@@ -163,6 +198,11 @@ export class AppComponent {
         });
       }
     }
+  }
+
+  handleUrlClick(event: MouseEvent) {
+    // Don't prevent default - let the link open in new tab
+    this.trackClick();
   }
 
   private isValidUrl(url: string): boolean {
