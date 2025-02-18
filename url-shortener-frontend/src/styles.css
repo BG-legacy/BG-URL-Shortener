@@ -6,9 +6,8 @@
   --galaxy-primary: #9c27b0;
   --galaxy-accent: #2196f3;
   --galaxy-text: #ffffff;
-  --galaxy-star: rgba(255, 255, 255, 0.8);
-  --galaxy-nebula-1: rgba(156, 39, 176, 0.2);
-  --galaxy-nebula-2: rgba(33, 150, 243, 0.2);
+  --galaxy-nebula-1: rgba(156, 39, 176, 0.3);
+  --galaxy-nebula-2: rgba(33, 150, 243, 0.3);
 }
 
 /* Base styles */
@@ -24,61 +23,10 @@ html, body {
 /* Galaxy background */
 body {
   position: relative;
-  background: radial-gradient(circle at center, #1a1a4f 0%, #0a0a2e 100%);
+  background: radial-gradient(circle at center, #1a1a4f 0%, #0a0a2e 70%, #050514 100%);
 }
 
-/* Static stars with better density */
-body::before {
-  content: '';
-  position: fixed;
-  width: 200vw;
-  height: 200vh;
-  top: -50vh;
-  left: -50vw;
-  z-index: 0;
-  background-image: 
-    radial-gradient(1px 1px at 15% 15%, var(--galaxy-star) 1px, transparent 0),
-    radial-gradient(1px 1px at 35% 35%, var(--galaxy-star) 1px, transparent 0),
-    radial-gradient(1px 1px at 55% 55%, var(--galaxy-star) 1px, transparent 0),
-    radial-gradient(1px 1px at 75% 75%, var(--galaxy-star) 1px, transparent 0),
-    radial-gradient(1px 1px at 95% 95%, var(--galaxy-star) 1px, transparent 0);
-  background-size: 
-    25px 25px,
-    35px 35px,
-    45px 45px,
-    55px 55px,
-    65px 65px;
-  opacity: 0.8;
-  /* Removed animation, stars are now static */
-  will-change: transform;
-  transform: translateZ(0);
-}
-
-/* Mobile-specific optimizations */
-@media screen and (max-width: 600px) {
-  body::before {
-    width: 200vw;
-    height: 200vh;
-    top: -50vh;
-    left: -50vw;
-    background-image: 
-      radial-gradient(1px 1px at 10% 10%, var(--galaxy-star) 1px, transparent 0),
-      radial-gradient(1px 1px at 30% 30%, var(--galaxy-star) 1px, transparent 0),
-      radial-gradient(1px 1px at 50% 50%, var(--galaxy-star) 1px, transparent 0),
-      radial-gradient(1px 1px at 70% 70%, var(--galaxy-star) 1px, transparent 0),
-      radial-gradient(1px 1px at 90% 90%, var(--galaxy-star) 1px, transparent 0);
-    background-size: 
-      20px 20px,  /* Smaller patterns for more stars */
-      30px 30px,
-      40px 40px,
-      50px 50px,
-      60px 60px;
-    opacity: 0.7;
-    /* No animation */
-  }
-}
-
-/* Keep the nebula animation for subtle movement */
+/* Keep only the nebula effect */
 body::after {
   content: '';
   position: fixed;
@@ -101,15 +49,30 @@ body::after {
 @keyframes nebulaPulse {
   0% {
     opacity: 0.3;
-    transform: scale(1);
+    transform: scale(1) translateZ(0);
   }
   50% {
-    opacity: 0.5;
-    transform: scale(1.2);
+    opacity: 0.4;
+    transform: scale(1.1) translateZ(0);
   }
   100% {
     opacity: 0.3;
-    transform: scale(1);
+    transform: scale(1) translateZ(0);
+  }
+}
+
+/* Mobile-specific optimizations */
+@media screen and (max-width: 600px) {
+  body {
+    background: radial-gradient(circle at center, #1a1a4f 0%, #0a0a2e 60%, #050514 100%);
+  }
+
+  body::after {
+    opacity: 0.7;
+    filter: blur(15px);
+    background: 
+      radial-gradient(circle at 20% 20%, var(--galaxy-nebula-1), transparent 40%),
+      radial-gradient(circle at 80% 80%, var(--galaxy-nebula-2), transparent 40%);
   }
 }
 
