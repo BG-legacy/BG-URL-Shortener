@@ -6,6 +6,7 @@
   --galaxy-primary: #9c27b0;
   --galaxy-accent: #2196f3;
   --galaxy-text: #ffffff;
+  --galaxy-star: rgba(255, 255, 255, 0.8);
   --galaxy-nebula-1: rgba(156, 39, 176, 0.3);
   --galaxy-nebula-2: rgba(33, 150, 243, 0.3);
 }
@@ -26,7 +27,35 @@ body {
   background: radial-gradient(circle at center, #1a1a4f 0%, #0a0a2e 70%, #050514 100%);
 }
 
-/* Keep only the nebula effect */
+/* Stars for desktop only */
+@media screen and (min-width: 601px) {
+  body::before {
+    content: '';
+    position: fixed;
+    width: 200vw;
+    height: 200vh;
+    top: -50vh;
+    left: -50vw;
+    z-index: 0;
+    background-image: 
+      radial-gradient(1px 1px at 15% 15%, var(--galaxy-star) 1px, transparent 0),
+      radial-gradient(1px 1px at 35% 35%, var(--galaxy-star) 1px, transparent 0),
+      radial-gradient(1px 1px at 55% 55%, var(--galaxy-star) 1px, transparent 0),
+      radial-gradient(1px 1px at 75% 75%, var(--galaxy-star) 1px, transparent 0),
+      radial-gradient(1px 1px at 95% 95%, var(--galaxy-star) 1px, transparent 0);
+    background-size: 
+      25px 25px,
+      35px 35px,
+      45px 45px,
+      55px 55px,
+      65px 65px;
+    opacity: 0.8;
+    will-change: transform;
+    transform: translateZ(0);
+  }
+}
+
+/* Nebula effect for all devices */
 body::after {
   content: '';
   position: fixed;
@@ -61,7 +90,7 @@ body::after {
   }
 }
 
-/* Mobile-specific optimizations */
+/* Mobile-specific optimizations - no stars */
 @media screen and (max-width: 600px) {
   body {
     background: radial-gradient(circle at center, #1a1a4f 0%, #0a0a2e 60%, #050514 100%);
